@@ -1,0 +1,40 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techie-horizon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: techie-horizon
+  template:
+    metadata:
+      labels:
+        app: techie-horizon
+    spec:
+      containers:
+        - name: techie-horizon
+          image: 137098074083.dkr.ecr.eu-north-1.amazonaws.com/techie-horizon:2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: techie-horizon-service
+spec:
+  type: ClusterIP
+  selector:
+    app: techie-horizon
+  ports:
+    - port: 80
+      targetPort: 80
